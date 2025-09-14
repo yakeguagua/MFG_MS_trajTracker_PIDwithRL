@@ -1,0 +1,13 @@
+
+
+task_enabled: true
+task_mode: site
+task_names: ["CIAS", "R_TOE", "L_TOE", "R_HM5", "L_HM5", "HTOP"]
+
+kp_q: 100
+kd_q: 20
+
+kx: 500.0
+dx: 50.0
+
+torque_limit: 1500.0

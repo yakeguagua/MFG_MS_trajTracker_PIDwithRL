@@ -1,0 +1,32 @@
+<mujoco model="FullBodyModel_MuscleActuatedLowerLimb_TorqueActuatedUpperBody">
+  <compiler angle="radian" boundmass="0.001" boundinertia="0.001"/>
+  <option gravity="0 0 -10"/>
+
+  <size njmax="1000" nconmax="400" nuser_jnt="1"/>
+
+  <visual>
+    <global offwidth="800" offheight="800"/>
+    <headlight ambient="0.6 0.6 0.6"/>
+    <rgba haze="0.35 0.45 0.55 1"/>
+  </visual>
+  
+  <asset>
+    <texture type="skybox" builtin="gradient" rgb1="0.6 0.8 1" rgb2="0 0 0" width="512" height="3072"/>
+    <texture type="2d" name="texplane" builtin="checker" rgb1="0.5 0.6 0.7" rgb2="0.6 0.7 0.8" width="100" height="100"/>
+    <material name="MatPlane" texture="texplane" texuniform="true" reflectance="0.2"/>
+  </asset>
+  
+  <default>
+    <joint stiffness="0" armature="0" damping="0"/>
+  </default>
+  
+  <worldbody>
+    <geom name="floor" size="0 0 0.125" type="plane" material="MatPlane" contype="1" conaffinity="1"/>
+    <body name="rod" pos="0 0 0.5">
+      <joint name="hinge" type="hinge" axis="0 1 0" limited="false"/>
+      <geom name="rod_geom" type="capsule" fromto="0 0 0 1 0 0" size="0.02" mass="1.0"/>
+    </body>
+  </worldbody>
+
+
+</mujoco>
