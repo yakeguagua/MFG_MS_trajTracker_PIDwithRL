@@ -126,7 +126,11 @@ class TrajectoryTracker:
         self._log_pelvis_F = []     # tau[:3] 平移力
         self._log_pelvis_M = []     # tau[3:6] 转矩
         self._log_pelvis_wrench_norm = []
-        
+        self._log_mq = []
+        self._log_mx = []   
+        self._log_mt = []
+        self.wq = 1.0; self.wx = 0.5; self.wt = 1e-4
+            
     @staticmethod
     def _as_vec(x, n):
         if np.isscalar(x): return np.full(n, float(x))

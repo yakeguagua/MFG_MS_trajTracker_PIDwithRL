@@ -1,0 +1,44 @@
+{
+  "best_J_proxy": -0.05366859464591318,
+  "episodes": 100,
+  "seed": 0,
+  "scales": {
+    "EQ_SCL": 0.1,
+    "EX_SCL": 0.03,
+    "MT_SCL": 60.0,
+    "TAU3_SCL": 200.0
+  },
+  "rollout_cfg": {
+    "seconds": 2.0,
+    "gamma": 0.99,
+    "action_stride": 5,
+    "frac_step": 0.03,
+    "phase_random": true
+  },
+  "reward_weights": {
+    "WQ": 1.0,
+    "WX": 1.0,
+    "WT": 0.0005,
+    "WT3": 0.5,
+    "WLIM": 0.001,
+    "WENT": 0.001
+  },
+  "gain_bounds": {
+    "lo": [
+      0.2,
+      0.2,
+      0.2,
+      0.2
+    ],
+    "hi": [
+      5.0,
+      5.0,
+      5.0,
+      5.0
+    ]
+  },
+  "policy_paths": {
+    "best": "best_policy.npz"
+  },
+  "train_log_csv": "rl_train_log.csv"
+}

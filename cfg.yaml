@@ -1,13 +1,64 @@
+assets:
+  xml: RKOB_simplified_upper_with_marker.xml
+  traj: traj_data/AJ026_Run_Comfortable.pkl
 
+run:
+  show_viewer: true
+  # seconds: 3.0   # 可选：只跑前 3 秒
 
 task_enabled: true
-task_mode: site
-task_names: ["CIAS", "R_TOE", "L_TOE", "R_HM5", "L_HM5", "HTOP"]
+# task_mode: site
+# task_names: ["CIAS", "R_TOE", "L_TOE", "R_HM5", "L_HM5", "HTOP"]
+task_mode: body
+task_names: ["pelvis", "toes_r", "toes_l", "hand_r", "hand_l", "head"]
+use_orientation_task: true
 
-kp_q: 100
-kd_q: 20
-
+kp_q: 200
+kd_q: 10
 kx: 500.0
 dx: 50.0
-
+kr: 200.0
+dr: 20.0
 torque_limit: 1500.0
+
+metrics:
+  wq: 1.0
+  wx: 0.5
+  wt: 1.0e-4
+  task_error_agg: mean      # mean | rms | max
+  # task_error_weights: [1, 1, 1, 1, 1, 1]  # 可按 task_names 顺序设权
+  write_csv: true
+  csv_path: metrics_baseline.csv
+  plot: true
+  scl_hint_percentile: 90
+  
+rl:
+  seconds: 2.0            # episode length (sec)
+  episodes: 100
+  seed: 0
+  action_stride: 5
+  frac_step: 0.03
+  gamma: 0.99
+  init_std: 0.08
+  lr: 1.0e-3
+  ent_coef: 5.0e-4
+  learn_std: true
+  scales:                  
+    EQ_SCL: 0.1
+    EX_SCL: 0.03
+    MT_SCL: 60.0
+    TAU3_SCL: 200.0
+  reward_weights:
+    WQ: 1.0
+    WX: 1.0
+    WT: 5.0e-4
+    WT3: 0.5
+    WLIM: 1.0e-3
+  gain_bounds:             
+    lo: [0.2, 0.2, 0.2, 0.2]
+    hi: [5.0, 5.0, 5.0, 5.0]
+  phase_random: true 
+  
+eval:
+  show_viewer: true
+  policy_path: best_policy.npz
