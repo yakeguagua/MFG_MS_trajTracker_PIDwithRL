@@ -1,0 +1,68 @@
+# Python 编译缓存
+__pycache__/
+*.py[cod]
+*$py.class
+
+# 虚拟环境
+.env/
+.venv/
+venv/
+ENV/
+env/
+.ipynb_checkpoints/
+
+# IDE/编辑器配置
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# 构建/打包
+build/
+dist/
+*.egg-info/
+*.egg
+
+# 日志 & 临时文件
+*.log
+*.tmp
+*.bak
+
+# 数据 & 输出
+#*.npz
+*.npy
+#*.pkl
+*.pckl
+*.pickle
+*.csv
+*.json
+#*.yaml
+#*.yml
+*.txt
+*.mat
+
+# 训练过程生成的模型、策略、检查点
+*.pth
+*.pt
+*.ckpt
+
+# MuJoCo
+*.mjb        # 编译后的 binary model
+*.stl
+*.xml~       # 编辑器临时文件
+
+# 可视化/绘图结果
+*.png
+*.jpg
+*.jpeg
+*.pdf
+*.svg
+
+# OS 特定
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# OneDrive/临时同步文件（你项目在 OneDrive 里）
+~$*
+*.tmp
