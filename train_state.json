@@ -1,15 +1,15 @@
 {
-  "best_J_proxy": -0.05366859464591318,
-  "episodes": 100,
-  "seed": 0,
+  "best_J_proxy": -0.13085419007113633,
+  "episodes": 50,
+  "seed": 101,
   "scales": {
-    "EQ_SCL": 0.1,
-    "EX_SCL": 0.03,
-    "MT_SCL": 60.0,
-    "TAU3_SCL": 200.0
+    "EQ_SCL": 0.2,
+    "EX_SCL": 0.1,
+    "MT_SCL": 100.0,
+    "TAU3_SCL": 500.0
   },
   "rollout_cfg": {
-    "seconds": 2.0,
+    "seconds": 2.5,
     "gamma": 0.99,
     "action_stride": 5,
     "frac_step": 0.03,
@@ -18,9 +18,9 @@
   "reward_weights": {
     "WQ": 1.0,
     "WX": 1.0,
-    "WT": 0.0005,
-    "WT3": 0.5,
-    "WLIM": 0.001,
+    "WT": 0.001,
+    "WT3": 2.0,
+    "WLIM": 0.0001,
     "WENT": 0.001
   },
   "gain_bounds": {

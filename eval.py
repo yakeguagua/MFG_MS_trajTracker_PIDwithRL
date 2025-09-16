@@ -10,7 +10,6 @@ from rl.policy_linear import LinearGaussianPolicy
 from rl.gain_param import GainParam4
 from rl.rollout import rollout_episode, RolloutCfg, RolloutScales, RewardWeights
 
-
 # ---------- builders ----------
 def _build_tracker_from_cfg(cfg: Dict[str, Any]) -> TrajectoryTracker:
     assets = cfg.get("assets", {})
@@ -64,7 +63,6 @@ def _cfg_to_objs(cfg: Dict[str, Any]):
 
 # ---------- viewer step helper ----------
 def _step_with_policy_once(tracker, t, gp, policy, rng, ro_cfg, scales, last):
-    """单步推进（用于 viewer 回放），返回 mq, mx, mt, last。"""
     a_p, a_d, b_x, b_v = gp.values()
     tracker.alpha_p = a_p; tracker.alpha_d = a_d
     tracker.beta_x  = b_x; tracker.beta_v  = b_v
@@ -82,9 +80,11 @@ def _step_with_policy_once(tracker, t, gp, policy, rng, ro_cfg, scales, last):
         a, logp, ent, mu, std = policy.act(s, rng)
         gp.step(a, frac_step=ro_cfg.frac_step)
         last.update(a=a, logp=float(logp), ent=float(ent), mu=mu, std=std)
+        
+    tau3 = np.linalg.norm(tracker._last_tau[:3])
 
     last["k"] += 1
-    return mq, mx, mt, last
+    return mq, mx, mt, tau3, last
 
 
 # ---------- main ----------
@@ -114,8 +114,7 @@ def main(cfg_path: str = "cfg.yaml"):
             T = min(len(info["t"]), len(info["mq"]), len(info["mx"]), len(info["mt"]))
             for i in range(T):
                 w.writerow([info["t"][i], info["mq"][i], info["mx"][i], info["mt"][i]])
-
-        # 写摘要
+                
         mq_avg = float(np.mean(info["mq"])) if info["mq"] else 0.0
         mx_avg = float(np.mean(info["mx"])) if info["mx"] else 0.0
         mt_avg = float(np.mean(info["mt"])) if info["mt"] else 0.0
@@ -135,14 +134,31 @@ def main(cfg_path: str = "cfg.yaml"):
     last = {"a": np.zeros(4, float), "mu": np.zeros(4, float), "std": np.exp(policy.log_std),
             "logp": 0.0, "ent": 0.0, "k": 0, "t0": 0.0}
     t = 0.0
+    t_list = [0]; alpha_p = [1]; alpha_d = [1]; tau3=[0]
     with viewer.launch_passive(tracker.model, tracker.data) as v:
         while t < min(ro_cfg.seconds, tracker.t_total):
             if not v.is_running(): break
-            _mq, _mx, _mt, last = _step_with_policy_once(tracker, t, gp, policy, rng, ro_cfg, scales, last)
+            _mq, _mx, _mt, _tau3, last = _step_with_policy_once(tracker, t, gp, policy, rng, ro_cfg, scales, last)
+            t_list.append(t); alpha_p.append(tracker.alpha_p); alpha_d.append(tracker.alpha_d); tau3.append(_tau3)
             v.sync()
-            time.sleep(1/100)
+            time.sleep(1/200)
             t += tracker.dt_sim
     print("[EVAL] viewer done.")
+    t_list = np.asarray(t_list); alpha_p = np.asarray(alpha_p); alpha_d = np.asarray(alpha_d); tau3 = np.asarray(tau3)
+    import matplotlib.pyplot as plt
+    plt.figure(figsize=(10, 6))
+    plt.subplot(2,1,1)
+    plt.plot(t_list, alpha_p, label="alpha_p")
+    plt.plot(t_list, alpha_d, label="alpha_d")
+    plt.xlabel("time (s)")
+    plt.ylabel("alpha")
+    plt.title("Alpha over time")
+    plt.legend()
+    plt.grid(True, alpha=0.3)
+    
+    plt.subplot(2,1,2)
+    plt.plot(t_list,tau3)
+    plt.show()
 
 
 if __name__ == "__main__":

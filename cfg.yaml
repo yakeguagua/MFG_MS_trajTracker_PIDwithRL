@@ -4,22 +4,22 @@ assets:
 
 run:
   show_viewer: true
-  # seconds: 3.0   # 可选：只跑前 3 秒
+  # seconds: 3.0
 
 task_enabled: true
-# task_mode: site
-# task_names: ["CIAS", "R_TOE", "L_TOE", "R_HM5", "L_HM5", "HTOP"]
-task_mode: body
-task_names: ["pelvis", "toes_r", "toes_l", "hand_r", "hand_l", "head"]
+task_mode: site
+task_names: ["CIAS", "R_TOE", "L_TOE", "R_HM5", "L_HM5", "HTOP"]
+# task_mode: body
+# task_names: ["pelvis", "toes_r", "toes_l", "hand_r", "hand_l", "head"]
 use_orientation_task: true
 
-kp_q: 200
+kp_q: 100
 kd_q: 10
 kx: 500.0
 dx: 50.0
 kr: 200.0
 dr: 20.0
-torque_limit: 1500.0
+torque_limit: 500.0
 
 metrics:
   wq: 1.0
@@ -33,27 +33,27 @@ metrics:
   scl_hint_percentile: 90
   
 rl:
-  seconds: 2.0            # episode length (sec)
-  episodes: 100
-  seed: 0
+  seconds: 2.5            # episode length (sec)
+  episodes: 50
+  seed: 101
   action_stride: 5
   frac_step: 0.03
   gamma: 0.99
-  init_std: 0.08
-  lr: 1.0e-3
-  ent_coef: 5.0e-4
+  init_std: 0.05
+  lr: 1.0e-4
+  ent_coef: 1.0e-4
   learn_std: true
   scales:                  
-    EQ_SCL: 0.1
-    EX_SCL: 0.03
-    MT_SCL: 60.0
-    TAU3_SCL: 200.0
+    EQ_SCL: 0.2
+    EX_SCL: 0.1
+    MT_SCL: 100.0
+    TAU3_SCL: 500.0
   reward_weights:
     WQ: 1.0
     WX: 1.0
-    WT: 5.0e-4
-    WT3: 0.5
-    WLIM: 1.0e-3
+    WT: 1.0e-3
+    WT3: 2.0
+    WLIM: 1.0e-4
   gain_bounds:             
     lo: [0.2, 0.2, 0.2, 0.2]
     hi: [5.0, 5.0, 5.0, 5.0]
