@@ -6,22 +6,23 @@ run:
   show_viewer: true
   # seconds: 3.0
 
-task_enabled: true
-task_mode: site
-task_names: ["CIAS", "R_TOE", "L_TOE", "R_HM5", "L_HM5", "HTOP"]
+task_enabled: true  #是否使用任务空间即xpos作为前馈项(当前支持site/body)
+task_mode: site #site or body
+task_names: ["CIAS", "R_TOE", "L_TOE", "R_HM5", "L_HM5", "HTOP"] # example of site names
 # task_mode: body
-# task_names: ["pelvis", "toes_r", "toes_l", "hand_r", "hand_l", "head"]
-use_orientation_task: true
+# task_names: ["pelvis", "toes_r", "toes_l", "hand_r", "hand_l", "head"] #当使用body时指定需要跟踪的body name
+use_orientation_task: true #是否使用orientation以及旋转角速度作为任务空间中的跟踪目标
 
-kp_q: 100
-kd_q: 10
-kx: 500.0
-dx: 50.0
-kr: 200.0
-dr: 20.0
-torque_limit: 500.0
+kp_q: 100 # Kp for qpos
+kd_q: 10 # Kd for qvel
+kx: 500.0 # Kp for xpos
+dx: 50.0 # Kd for xvel
+kr: 200.0 # Kp for xmat (optional)
+dr: 20.0 # Kd for angular velocity (optional)
+torque_limit: 500.0 #每个关节qfrc applied的限值
 
-metrics:
+# 用于优化任务的目标函数超参数
+metrics: 
   wq: 1.0
   wx: 0.5
   wt: 1.0e-4
@@ -31,7 +32,8 @@ metrics:
   csv_path: metrics_baseline.csv
   plot: true
   scl_hint_percentile: 90
-  
+
+# RL 超参数定义
 rl:
   seconds: 2.5            # episode length (sec)
   episodes: 50
